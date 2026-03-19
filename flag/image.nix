@@ -57,13 +57,6 @@ let
                 Minimize = "best";
               };
             };
-            "50-home" = {
-              repartConfig = {
-                Type = "home";
-                Label = "home";
-                Format = "xfs";
-              };
-            };
           };
         };
 
@@ -101,6 +94,9 @@ let
           initrd = {
             systemd = {
               enable = true;
+              extraBin = {
+                "mkfs.xfs" = "${pkgs.xfsprogs}/bin/mkfs.xfs";
+              };
               dmVerity.enable = true;
               network.enable = true;
               repart = {
@@ -108,21 +104,24 @@ let
                 device = "/dev/sda";
               };
               tpm2.enable = true;
+              services.systemd-repart = {
+                after = [ "systemd-veritysetup@root.service" ];
+                path = [ pkgs.xfsprogs ];
+              };
             };
             luks.forceLuksSupportInInitrd = true;
             kernelModules = [
               "dm_mod"
               "dm_crypt"
+              "xfs"
             ]
             ++ config.boot.initrd.luks.cryptoModules;
+            supportedFilesystems.xfs = true;
           };
           kernelParams = [
             "console=ttyS0"
             "roothash=${stubhash}" # use fake hash
           ];
-          supportedFilesystems = {
-            xfs = true;
-          };
         };
 
         systemd = {
@@ -130,7 +129,7 @@ let
             home = {
               Type = "home";
               Label = "home";
-              Format = "xfs"; # this should both grow the partition + xfs_growfs the filesystem
+              Format = "xfs"; # this should both grow the partition & filesystem
               Encrypt = "tpm2"; # tpm-backed luks encryption on /home
             };
           };
@@ -150,6 +149,7 @@ let
 
         environment.systemPackages = [
           pkgs.vim # probably need an editor
+          pkgs.xfsprogs # xfs
           pkgs.cryptsetup # might need this for setting a passphrase instead of tpm
         ];
       }

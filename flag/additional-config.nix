@@ -1,5 +1,4 @@
 {
-
   services.getty.autologinUser = "root";
   boot.initrd.systemd.emergencyAccess = true;
   systemd.enableEmergencyMode = true;
