@@ -18,9 +18,8 @@
     pkgs.bubblewrap
     pkgs.xdg-dbus-proxy
 
-    # gnome console & nautilus
+    # gnome console
     pkgs.gnome-console
-    pkgs.nautilus
 
   ];
 
@@ -45,6 +44,7 @@
     };
     displayManager.gdm.enable = true;
   };
+  environment.gnome.excludePackages = [ pkgs.gnome-tour ];
 
   # use system user ranges for gdm
   users.users = {
@@ -76,4 +76,6 @@
   };
   documentation.nixos.enable = false;
   users.users.root.hashedPassword = "!";
+  security.sudo.enable = false;
+  programs.nano.enable = false;
 }

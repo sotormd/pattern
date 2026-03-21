@@ -38,16 +38,11 @@ let
         boot = {
           kernelParams = [ "roothash=${stubhash}" ];
           initrd.systemd = {
+            enable = true;
             dmVerity.enable = true;
             services.systemd-repart.after = [ "systemd-veritysetup@root.service" ];
           };
         };
-
-        # systemd in initrd
-        boot.initrd.systemd.enable = true;
-
-        # use systemd-boot as the bootloader
-        boot.loader.systemd-boot.enable = true;
 
         # do not change
         system.stateVersion = "25.11";
