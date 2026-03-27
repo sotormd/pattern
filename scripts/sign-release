@@ -1,0 +1,23 @@
+#!/usr/bin/env bash
+set -euo pipefail
+
+if [ "$#" -ne 2 ]; then
+  echo "usage: sign-release <result-dir> <gpg-home>"
+  exit 1
+fi
+
+RESULT="$1"
+GNUPGHOME="$2"
+
+export GNUPGHOME
+
+OUT="./pattern-release"
+
+rm -rf "$OUT"
+mkdir -p "$OUT"
+
+cp -r "$RESULT"/* "$OUT/"
+
+gpg --detach-sign --output "$OUT/SHA256SUMS.gpg" "$OUT/SHA256SUMS"
+
+echo "$OUT"

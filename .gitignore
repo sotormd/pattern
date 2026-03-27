@@ -1,3 +1,4 @@
+*-gpg
+*.pgp
 *result*
-*raw*
-*tpm*
+*pattern-release*

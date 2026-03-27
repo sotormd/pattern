@@ -1,0 +1,34 @@
+#!/usr/bin/env bash
+set -euo pipefail
+
+if [ "$#" -ne 1 ]; then
+  echo "usage: generate-keyring <name>"
+  exit 1
+fi
+
+NAME="$1"
+GNUPGHOME="$(pwd)/$NAME-gpg"
+
+mkdir -p "$GNUPGHOME"
+chmod 700 "$GNUPGHOME"
+
+export GNUPGHOME
+
+cat >keygen <<EOF
+Key-Type: eddsa
+Key-Curve: ed25519
+Subkey-Type: ecdh
+Subkey-Curve: cv25519
+Name-Real: $NAME
+Expire-Date: 0
+%no-protection
+%commit
+EOF
+
+gpg --batch --generate-key keygen
+rm keygen
+
+gpg --export > "$NAME-pubring.pgp"
+
+echo "private:  $GNUPGHOME/"
+echo "public :  $NAME-pubring.pgp"
