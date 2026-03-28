@@ -12,7 +12,7 @@
       sizes = {
         esp = "200M";
         verity = "200M";
-        usr = "1G";
+        usr = "2G";
       };
       persist = {
         etc = true;
