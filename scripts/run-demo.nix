@@ -2,7 +2,7 @@
   pkgs,
   ...
 }:
-pkgs.writeShellScriptBin {
+pkgs.writeShellApplication {
   name = "boot-uefi-qemu";
 
   runtimeInputs = with pkgs; [
