@@ -19,5 +19,3 @@ mkdir -p "$OUT"
 cp -r "$RESULT"/* "$OUT/"
 
 gpg --detach-sign --output "$OUT/SHA256SUMS.gpg" "$OUT/SHA256SUMS"
-
-echo "$OUT"

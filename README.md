@@ -1,21 +1,29 @@
 # pattern
 
-Atomic, image-based systems with A/B updates - provisioned using Nix.
+Atomic, image-based systems with A/B updates, provisioned using Nix.
 
 > pattern is not a distro, but provides a base module for building your own
 > systems! See [Explanation](#explanation) for more information.
+
+# Contents
+
+1. [Features](#features)
+2. [Explanation](#explanation)
+3. [Demonstration](#demonstration)
+4. [Usage](#usage)
+5. [Options](#options)
 
 # Features
 
 - [x] Base image generated using `systemd-repart`
 - [x] Verity on erofs root Nix Store using `systemd-veritysetup`
-- [x] Inflatable TPMv2 LUKS-encrypted persistent partition using
+- [x] Expandable TPMv2 LUKS-encrypted persistent partition using
       `systemd-repart`
 - [x] Signed A/B store updates using `systemd-sysupdate`
 - [x] Optional unprivileged user setup on first boot using `systemd-homed`
 - [x] Optional distrobox, bubblewrap and xdg-dbus-proxy to install and sandbox
       apps
-- [x] Optional Minimal GNOME desktop
+- [x] Optional minimal GNOME desktop
 
 # Explanation
 
@@ -33,6 +41,66 @@ to build your own base images. See [Usage](#usage) for more information.
 
 pattern also provides some of its own options to configure aspects of the
 `nixosModules.pattern`. See [Options](#options) for all included options.
+
+This repository also contains a demonstration system. See
+[Demonstration](#demonstration) for more information.
+
+# Demonstration
+
+This section covers using the demonstration system. See [Usage](#usage) for
+building your own systems.
+
+The configuration for the demonstration system is in
+[`demo/demo.nix`](./demo/demo.nix).
+
+> The demonstration system is ONLY FOR DEMONSTRATION of some of pattern's
+> features and is unusable in real environments.
+
+1. Download and verify the `demo_0.0.1.raw` base image from the Releases
+   section.
+
+2. Expand the image to create space for the encrypted persistent partition:
+
+   ```bash
+   chmod +w demo_0.0.1.raw
+   qemu-img resize -f raw demo_0.0.1.raw "+50G"
+   ```
+
+3. Boot the image using the included run-demo package, or using QEMU/KVM
+   yourself:
+
+   ```bash
+   nix run github:sotormd/pattern#run-demo -- demo_0.0.1.raw
+   ```
+
+4. You will be logged in as root automatically. The default root password is
+   `demo`. This can be changed using `passwd`:
+
+   ```bash
+   passwd
+   ```
+
+5. The demo image has a persistent `/etc`, `/home`, `/srv` and `/var`. New users
+   can be created normally using `useradd`:
+
+   ```bash
+   useradd foo
+   ```
+
+6. A demonstration update release is also included. To use this update:
+
+   ```bash
+   updatectl check
+   updatectl update
+   ```
+
+7. Reboot and you will be able to boot into `demo_0.0.2`. The only change is
+   that the `fastfetch` package is installed. This can be verified by running
+   it:
+
+   ```bash
+   fastfetch
+   ```
 
 # Usage
 
