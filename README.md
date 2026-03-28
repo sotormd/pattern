@@ -56,8 +56,8 @@ The configuration for the demonstration system is in
 > The demonstration system is ONLY FOR DEMONSTRATION of some of pattern's
 > features and is unusable in real environments.
 
-1. Download and verify the `demo_0.0.1.raw` base image from the Releases
-   section.
+1. Download and verify the `demo_0.0.1.raw` base image from the
+   [Releases section](https://github.com/sotormd/pattern/releases/tag/demo).
 
 2. Expand the image to create space for the encrypted persistent partition:
 
