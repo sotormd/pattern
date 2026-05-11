@@ -2,9 +2,6 @@
 
 Atomic, image-based systems with A/B updates, provisioned using Nix.
 
-> pattern is not a distro, but provides a base module for building your own
-> systems! See [Explanation](#explanation) for more information.
-
 # Contents
 
 1. [Features](#features)
@@ -30,6 +27,10 @@ Atomic, image-based systems with A/B updates, provisioned using Nix.
 pattern provides a base module which can be used to implement concepts from
 [Fitting Everything Together](https://0pointer.net/blog/fitting-everything-together.html)
 using Nix!
+
+pattern maintains two complete sets of `/usr` partitions (slots A and B - each
+with a Nix Store), plus associated verity partitions for atomic over-the-air
+updates.
 
 **pattern is primarily developed for my own personal use. Its design and
 priorities are driven by my requirements. The documentation is written to help
@@ -151,7 +152,7 @@ This section covers using pattern to build your own base images.
 
 6. Once you are done, you can build your base image:
 
-   ```nix
+   ```bash
    nix build .#nixosConfigurations.mySystem.config.pattern.release
    ```
 
