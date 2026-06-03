@@ -10,6 +10,7 @@
         id = lib.mkOption { type = lib.types.str; };
         version = lib.mkOption { type = lib.types.str; };
         updates = {
+          enable = lib.mkOption { type = lib.types.bool; };
           url = lib.mkOption { type = lib.types.str; };
           pubring = lib.mkOption { type = lib.types.path; };
         };

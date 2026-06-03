@@ -1,6 +1,6 @@
 { config, lib, ... }:
 
-{
+lib.mkIf config.pattern.image.updates.enable {
   environment.etc."systemd/import-pubring.pgp".source = config.pattern.image.updates.pubring;
 
   systemd.sysupdate.enable = lib.mkDefault true;

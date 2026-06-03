@@ -1,3 +1,6 @@
 *-gpg
 *result*
 *pattern-release*
+*swtpm*
+*.raw
+*.efi

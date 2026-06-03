@@ -1,7 +1,5 @@
-{
-  pkgs,
-  ...
-}:
+{ pkgs, ... }:
+
 pkgs.writeShellApplication {
   name = "boot-uefi-qemu";
 
@@ -15,14 +13,12 @@ pkgs.writeShellApplication {
       tpmOVMF = pkgs.OVMF.override { tpmSupport = true; };
     in
     ''
-      tpmdir=$(mktemp -d)
+      tpmdir=./pattern-demo-swtpm
       swtpm socket -d --tpmstate dir="$tpmdir" \
         --ctrl type=unixio,path="$tpmdir/swtpm-sock" \
         --tpm2 \
         --log level=20
 
-      tmpFile=$(mktemp)
-      cp "$1" "$tmpFile"
       qemu-system-x86_64 \
         -enable-kvm \
         -m 4G \
@@ -32,6 +28,6 @@ pkgs.writeShellApplication {
         -chardev socket,id=chrtpm,path="$tpmdir/swtpm-sock" \
         -tpmdev emulator,id=tpm0,chardev=chrtpm \
         -device tpm-tis,tpmdev=tpm0 \
-        -drive "format=raw,file=$tmpFile"
+        -drive "format=raw,file=$1"
     '';
 }

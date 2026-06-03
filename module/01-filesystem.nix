@@ -28,14 +28,14 @@
       SizeMinBytes = config.pattern.partitions.sizes.usr;
       SizeMaxBytes = config.pattern.partitions.sizes.usr;
     };
-    "30-usr-verity-b" = {
+    "30-usr-verity-b" = lib.mkIf config.pattern.image.updates.enable {
       Type = "usr-verity";
       SizeMinBytes = config.pattern.partitions.sizes.verity;
       SizeMaxBytes = config.pattern.partitions.sizes.verity;
       Label = "_empty";
       ReadOnly = 1;
     };
-    "40-usr-b" = {
+    "40-usr-b" = lib.mkIf config.pattern.image.updates.enable {
       Type = "usr";
       SizeMinBytes = config.pattern.partitions.sizes.usr;
       SizeMaxBytes = config.pattern.partitions.sizes.usr;
@@ -47,7 +47,7 @@
       Label = "persist";
       Format = "xfs";
       Encrypt = "tpm2"; # use tpm encryption
-      MakeDirectories = "/root/etc /root/home /root/srv /root/var /root/nix/upper /root/nix/work";
+      MakeDirectories = "/root/etc /root/home /root/srv /root/var";
     };
   };
 
@@ -66,6 +66,7 @@
       };
       persist = dir: {
         device = "/persist/root${dir}";
+        fsType = "none";
         options = [ "bind" ];
         neededForBoot = true;
       };
@@ -73,6 +74,7 @@
     {
       "/nix/store" = {
         device = "/usr/nix/store";
+        fsType = "none";
         options = [ "bind" ];
         neededForBoot = true;
       };

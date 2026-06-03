@@ -1,11 +1,12 @@
+{ pkgs, ... }:
+
 {
   pattern = {
     image = {
       id = "demo";
+      version = "static";
       updates = {
-        enable = true;
-        url = "https://github.com/sotormd/pattern/releases/latest/download";
-        pubring = ./demo-pubring.pgp;
+        enable = false;
       };
     };
     partitions = {
@@ -34,4 +35,6 @@
   boot.kernelParams = [ "console=ttyS0" ];
 
   users.users.root.initialPassword = "demo";
+
+  environment.systemPackages = [ pkgs.fastfetch ];
 }

@@ -16,7 +16,7 @@ Atomic, image-based systems with A/B updates, provisioned using Nix.
 - [x] Verity on erofs root Nix Store using `systemd-veritysetup`
 - [x] Expandable TPMv2 LUKS-encrypted persistent partition using
       `systemd-repart`
-- [x] Signed A/B store updates using `systemd-sysupdate`
+- [x] Optional signed A/B store updates using `systemd-sysupdate`
 - [x] Optional unprivileged user setup on first boot using `systemd-homed`
 - [x] Optional distrobox, bubblewrap and xdg-dbus-proxy to install and sandbox
       apps
@@ -30,7 +30,8 @@ using Nix!
 
 pattern maintains two complete sets of `/usr` partitions (slots A and B - each
 with a Nix Store), plus associated verity partitions for atomic over-the-air
-updates.
+updates. Note that pattern can be used as a static image without separate update
+slots if updates are disabled.
 
 **pattern is primarily developed for my own personal use. Its design and
 priorities are driven by my requirements. The documentation is written to help
@@ -56,6 +57,15 @@ The configuration for the demonstration system is in
 
 > The demonstration system is ONLY FOR DEMONSTRATION of some of pattern's
 > features and is unusable in real environments.
+
+There are two demonstrations provided:
+
+1. Demonstration image(s) with A/B updates fetched from GitHub releases. Note
+   that this requires signed images for the update.
+2. A static demonstration image with A/B updates disabled. This can be built
+   locally since signing is not required.
+
+## Demonstration with A/B Updates
 
 1. Download and verify the `demo_0.0.1.raw` base image from the
    [Releases section](https://github.com/sotormd/pattern/releases/tag/demo).
@@ -102,6 +112,22 @@ The configuration for the demonstration system is in
    ```bash
    fastfetch
    ```
+
+## Static Demonstration Image
+
+Build the image locally and proceed as above.
+
+```bash
+nix build github:sotormd/pattern#nixosConfigurations.demo-static.config.pattern.release
+cp ./result/demo_static.raw demo_static.raw
+chmod +w demo_static.raw
+qemu-img resize -f raw demo_static.raw "+50G"
+nix run github:sotormd/pattern#run-demo -- demo_static.raw
+```
+
+> Since pattern creates verity partitions _after_ building the other partitions,
+> it requires IFD. You need to pass `--option allow-import-from-derivation true`
+> if IFD is disabled in your Nix evaluator.
 
 # Usage
 
@@ -156,6 +182,11 @@ This section covers using pattern to build your own base images.
    nix build .#nixosConfigurations.mySystem.config.pattern.release
    ```
 
+   > Since pattern creates verity partitions _after_ building the other
+   > partitions, it requires IFD. You need to pass
+   > `--option allow-import-from-derivation true` if IFD is disabled in your Nix
+   > evaluator.
+
 7. To create the final signed release artifact:
 
    ```bash
@@ -201,6 +232,13 @@ The version of the image.
 
 Used by the update system to determine whether a newer version is available and
 to label boot entries.
+
+### `pattern.image.updates.enable`
+
+- **Type:** `bool`
+- **Required:** yes
+
+Whether to update pattern using `systemd-sysupdate`.
 
 ### `pattern.image.updates.url`
 
@@ -330,8 +368,3 @@ Enable `distrobox` for managing application containers.
 - **Default:** `false`
 
 Enable additional sandboxing tools such as `bubblewrap` and `xdg-dbus-proxy`.
-
-## Notes
-
-- pattern provides a base system only. Many aspects (such as update transport
-  and application model) are intentionally left to the user.
