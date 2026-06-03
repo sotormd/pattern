@@ -36,7 +36,7 @@
 
             {
               pattern.image.version = "0.0.2";
-              environment.systemPackages = [ pkgs.fastfetch ];
+              environment.systemPackages = [ pkgs.microfetch ];
             }
           ];
         };

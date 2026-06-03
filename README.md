@@ -106,11 +106,11 @@ There are two demonstrations provided:
    ```
 
 7. Reboot and you will be able to boot into `demo_0.0.2`. The only change is
-   that the `fastfetch` package is installed. This can be verified by running
+   that the `microfetch` package is installed. This can be verified by running
    it:
 
    ```bash
-   fastfetch
+   microfetch
    ```
 
 ## Static Demonstration Image
