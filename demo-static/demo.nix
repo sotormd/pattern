@@ -37,4 +37,7 @@
   users.users.root.initialPassword = "demo";
 
   environment.systemPackages = [ pkgs.fastfetch ];
+
+  # do not change
+  stateVersion = "25.11";
 }

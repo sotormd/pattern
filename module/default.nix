@@ -54,8 +54,5 @@
     # distro name
     nixos.distroName = "${config.system.image.id}_${config.system.image.version}";
 
-    # do not change
-    stateVersion = "25.11";
-
   };
 }

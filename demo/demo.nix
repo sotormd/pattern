@@ -34,4 +34,8 @@
   boot.kernelParams = [ "console=ttyS0" ];
 
   users.users.root.initialPassword = "demo";
+
+  # do not change
+  stateVersion = "25.11";
+
 }
