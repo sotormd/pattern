@@ -14,6 +14,7 @@ pkgs.writeShellApplication {
     in
     ''
       tpmdir=./pattern-demo-swtpm
+      mkdir -p "$tpmdir"
       swtpm socket -d --tpmstate dir="$tpmdir" \
         --ctrl type=unixio,path="$tpmdir/swtpm-sock" \
         --tpm2 \
