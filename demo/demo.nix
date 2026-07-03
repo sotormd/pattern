@@ -36,6 +36,5 @@
   users.users.root.initialPassword = "demo";
 
   # do not change
-  stateVersion = "25.11";
-
+  system.stateVersion = "25.11";
 }
