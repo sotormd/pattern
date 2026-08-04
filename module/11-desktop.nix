@@ -28,11 +28,11 @@
 
     # use system user ranges for gdm
     users.users = {
-      gdm-greeter.uid = lib.mkForce 880;
-      gdm-greeter-1.uid = lib.mkForce 881;
+      gdm-greeter.uid = lib.mkForce 881;
       gdm-greeter-2.uid = lib.mkForce 882;
       gdm-greeter-3.uid = lib.mkForce 883;
       gdm-greeter-4.uid = lib.mkForce 884;
+      gdm-greeter-5.uid = lib.mkForce 885;
     };
 
   };

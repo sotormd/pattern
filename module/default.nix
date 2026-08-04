@@ -39,7 +39,6 @@
 
     # debug
     ./90-debug.nix
-    ./91-quiet.nix
 
   ];
 

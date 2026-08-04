@@ -23,7 +23,6 @@ pkgs.writeShellApplication {
       qemu-system-x86_64 \
         -enable-kvm \
         -m 4G \
-        -nographic \
         -drive if=pflash,format=raw,readonly=on,file=${tpmOVMF.firmware} \
         -drive if=pflash,format=raw,readonly=on,file=${tpmOVMF.variables} \
         -chardev socket,id=chrtpm,path="$tpmdir/swtpm-sock" \

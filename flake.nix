@@ -6,8 +6,10 @@
   };
 
   outputs =
-    { self, ... }@inputs:
+    inputs:
     let
+      inherit (inputs) self;
+
       system = "x86_64-linux";
       pkgs = inputs.nixpkgs.legacyPackages.${system};
     in
@@ -47,6 +49,15 @@
           modules = [
             self.nixosModules.pattern
             ./demo-static
+          ];
+        };
+
+        demo-static-gnome = inputs.nixpkgs.lib.nixosSystem {
+          inherit system;
+          specialArgs = { inherit inputs; };
+          modules = [
+            self.nixosModules.pattern
+            ./demo-static-gnome
           ];
         };
 

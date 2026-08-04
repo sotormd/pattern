@@ -29,9 +29,11 @@ pattern provides a base module which can be used to implement concepts from
 using Nix!
 
 pattern maintains two complete sets of `/usr` partitions (slots A and B - each
-with a Nix Store), plus associated verity partitions for atomic over-the-air
-updates. Note that pattern can be used as a static image without separate update
-slots if updates are disabled.
+with a Nix Store) for atomic over-the-air updates, along with associated verity
+partitions. The Nix Store is bind mounted from `/usr/nix/store` to `/nix/store`.
+
+Note that pattern can be used as a static image without separate update slots if
+updates are disabled.
 
 **pattern is primarily developed for my own personal use. Its design and
 priorities are driven by my requirements. The documentation is written to help
@@ -58,12 +60,13 @@ The configuration for the demonstration system is in
 > The demonstration system is ONLY FOR DEMONSTRATION of some of pattern's
 > features and is unusable in real environments.
 
-There are two demonstrations provided:
+There are three demonstrations provided:
 
 1. Demonstration image(s) with A/B updates fetched from GitHub releases. Note
    that this requires signed images for the update.
 2. A static demonstration image with A/B updates disabled. This can be built
    locally since signing is not required.
+3. Same as #2, but with a full GNOME desktop, distrobox and systemd-homed.
 
 ## Demonstration with A/B Updates
 
@@ -125,6 +128,16 @@ qemu-img resize -f raw demo_static.raw "+50G"
 nix run github:sotormd/pattern#run-demo -- demo_static.raw
 ```
 
+For an image with the included GNOME desktop:
+
+```
+nix build github:sotormd/pattern#nixosConfigurations.demo-static-gnome.config.pattern.release
+cp ./result/demo_static-gnome.raw demo_static-gnome.raw
+chmod +w demo_static-gnome.raw
+qemu-img resize -f raw demo_static-gnome.raw "+50G"
+nix run github:sotormd/pattern#run-demo -- demo_static-gnome.raw
+```
+
 > Since pattern creates verity partitions _after_ building the other partitions,
 > it requires IFD. You need to pass `--option allow-import-from-derivation true`
 > if IFD is disabled in your Nix evaluator.
@@ -143,7 +156,7 @@ This section covers using pattern to build your own base images.
    `inputs.pattern.nixosModules.pattern`. Example:
 
    ```nix
-   outputs = { self, ... }@inputs: {
+   outputs = inputs: {
        nixosConfigurations.mySystem = inputs.nixpkgs.lib.nixosSystem {
            system = "x86_64-linux";
            modules = [
